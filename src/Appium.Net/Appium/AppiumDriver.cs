@@ -25,6 +25,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Castle.Core.Internal;
 using OpenQA.Selenium.Appium.ScreenRecording;
+using OpenQA.Selenium.Interactions;
 
 namespace OpenQA.Selenium.Appium
 {
@@ -385,6 +386,30 @@ namespace OpenQA.Selenium.Appium
         }
 
         #endregion Multi Actions
+
+        #region W3C Actions
+
+        // Replace or hide the original RemoteWebElement.PerformActions base method so that it does not require
+        // AppiumDriver to be fully compliant with W3CWireProtocol specification to execute W3C actions command.
+        public new void PerformActions(IList<ActionSequence> actionSequenceList)
+        {
+            if (actionSequenceList == null)
+            {
+                throw new ArgumentNullException("actionSequenceList", "List of action sequences must not be null");
+            }
+
+            List<object> objectList = new List<object>();
+            foreach (ActionSequence sequence in actionSequenceList)
+            {
+                objectList.Add(sequence.ToDictionary());
+            }
+
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters["actions"] = objectList;
+            this.Execute(DriverCommand.Actions, parameters);
+        }
+
+        #endregion W3C Actions
 
         #region Device Time
 

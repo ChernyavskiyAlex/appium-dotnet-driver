@@ -180,6 +180,15 @@ namespace OpenQA.Selenium.Appium
 
         #endregion MultiTouchActions
 
+        #region W3C Actions
+
+        /// <summary>
+        /// Perform multi purpose W3C actions
+        /// </summary>
+        public const string Actions = "actions";
+
+        #endregion W3C Actions
+
         #region Context Commands
 
         /// <summary>
